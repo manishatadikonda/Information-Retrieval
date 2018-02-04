@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Information Retrieval</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+	<p class="stark">THE STARKS</p>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>.
+<script>
+
+
+        
+	function solr_success(data) {
+		console.log(data);
+		var docList = data.response.docs;
+		console.log(docList);
+		var clust = data.clusters;
+		console.log(clust);
+		
+		for(var i=0; i < docList.length; i++)
+		{
+			var ul = document.createElement('ul');
+			var text = docList[i].text;
+		//	console.log(text);
+			var d = document.getElementById('center');
+			var x = document.createElement("DIV");
+			var t = document.createTextNode(text);
+	//		x.setAttribute("style", "color: white;");
+			
+			d.appendChild(x);
+			x.appendChild(t);
+			x.appendChild(ul);
+			x.style.maring = "1%";
+			x.style.width = "100%";
+			//document.body.appendChild(x);
+			
+		
+		}
+		
+		for(var i=0; i < clust.length; i++)
+		{
+			var d1 = document.getElementById('left');
+			var cl1 = clust[i].labels;
+			var cl2 = document.createElement("DIV");
+			var cl3 = document.createTextNode(cl1);
+		//	cl2.setAttribute("style", "color: white;", "display: inline-block;");
+			d1.appendChild(cl2);
+			cl2.appendChild(cl3);
+			cl2.style.width = "100%";
+		//	document.body.appendChild(cl2);
+			cl2.addEventListener("click",summary);
+		}
+	}
+		
+	function summary()
+	{
+		$("#right").html("");
+		var query = $(this).text();
+		var src = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
+	//	var val = document.getElementById("search").value;
+		$.getJSON(src+query+"&callback=?",function(data) {
+		
+	//	var sum = data.response.docs;
+		console.log(data);
+		var s1;
+		var d2 = document.getElementById('right');
+		
+		//alert(data["query"].pages[0].extract);
+		$.each(data["query"].pages, function(k, v){
+			s1 = (v.extract);
+		});
+		//$("#s2").html("");
+		var s2 = document.createElement("DIV");
+		var s3 = document.createTextNode(s1);
+		//cl2.setAttribute("style", "color: white;", "display: inline-block;");
+		d2.appendChild(s2);
+		s2.appendChild(s3);
+		s2.style.width = "100%";
+		//	document.body.appendChild(cl2);
+		
+		});
+		
+	}
+
+	
+	
+	$(document).ready(function(){
+	/*    $("#search").submit(function(){
+			$("input").hide();
+		});*
+		$("#show").click(function(){
+			$("form2").hide();
+		});*/
+		$("#search").on("keypress", function(event) {
+			
+			if (event.keyCode == 13) {
+				event.preventDefault();
+				$("#search").hide();
+				$("#form2").show();
+		//		$("#left").ssearch();
+				ssearch();
+			}
+			
+			
+		});
+		function ssearch() {
+	//	http://35.161.113.92:8984/solr/irp4/select?indent=on&q=Christmas&rows=100&wt=json
+			var src = "https://35.161.113.92:8984/solr/irp4/select?indent=on&q=";
+			var val = document.getElementById("search").value;
+			$.getJSON(src+val+"&rows=100&wt=json&callback=?&json.wrf=solr_success");
+		}
+		
+
+		
+		
+	});
+</script>
+</head>
+<body>
+<form>
+  <input type="text" id="search" placeholder="Search.." />
+  <!--<input type="button" id="btn_search" onclick="ssearch" value="Enter"/>-->
+ <!-- <div id="data">
+    <div class="template auctionbox"></div>
+</div>-->
+</form>
+
+<form id="form2" style="display: none;">
+	
+	<div id="left1"><h2>Cluster</h2></div>
+	<div id="center1"><h2>Data</h2></div>
+	<div id="right1"><h2>Summary</h2></div>
+	
+	<div id="left" ></div>
+	<div id="center"></div>
+	<div id="right"></div>
+</form>
+
+</body>
+</html>

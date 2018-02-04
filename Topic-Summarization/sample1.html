@@ -1,0 +1,60 @@
+<html>
+<body>
+	<input type="text" id="edit_search" onkeyup="javascript: find_my_div();">
+	<input type="button" onClick="javascript: find_my_div();" value="Find">
+        
+<script>
+
+function gid(a_id) {
+	return document.getElementById (a_id)	;
+}
+
+  function close_all(){
+  
+  	for (i=0;i<999; i++) {
+  		var o = gid("user_"+i);
+  		if (o) {
+  			o.style.display = "none";
+  		}
+  	}
+  
+  }
+
+
+  function find_my_div(){ 
+  	close_all(); 
+  	
+	var o_edit = gid("edit_search");
+	var str_needle = edit_search.value;
+	str_needle = str_needle.toUpperCase();
+  
+	if (str_needle != "") {
+		for (i=0;i<999; i++) {
+	  	var o = gid("user_"+i);
+	  	if (o) { 
+	  		
+	  		var str_haystack = o.innerHTML.toUpperCase();
+	  		if (str_haystack.indexOf(str_needle) ==-1) {
+	  			// not found, do nothing
+	  		}
+	  		else{
+	  			o.style.display = "block";
+		  		}	
+  			}
+  		}
+  	}
+  
+  }
+</script>
+    
+<div id="user_0" style="display:none">Andy Daulton<br/>Owner Nissan<br/><br/></div>
+<div id="user_1" style="display:none">Doug Guy<br/>Bug Collector<br/><br/></div>
+<div id="user_2" style="display:none">Sam Hilton<br/>Famous Celebrity in Hollywood<br/><br/></div>
+<div id="user_3" style="display:none">Don Grey<br/>Old man<br/><br/></div>
+<div id="user_4" style="display:none">Amy Hinterly<br/>Cook<br/><br/></div>
+<div id="user_5" style="display:none">Gary Doll<br/>Racecar Driver<br/><br/></div>
+<div id="user_6" style="display:none">Tod Akers<br/>Football Player<br/><br/></div>
+<div id="user_7" style="display:none">Greg Barkley<br/>Interior designer<br/><br/></div>
+<div id="user_8" style="display:none">Alen Simmons<br/>8th place winner<br/><br/></div>
+</body>
+</html>
